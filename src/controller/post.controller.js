@@ -12,6 +12,24 @@ exports.post_classification = async (req, res) => {
     }
 }
 
+exports.DeletePost=async(req,res)=>{
+    const id = req.params.id.split(":").map(String)[1];
+    console.log(id);
+    const exist = await PostModel.findOne({"_id":id});
+    if(!exist){
+         return res.status(401).send({ message: "POST allredy deleted from OLX" })
+    }else{
+        try {
+            await PostModel.findOneAndDelete({ "_id": id })
+            return res.status(202).send({ message: "POST deleted successfully" })
+        } catch (error) {
+            console.log(error)
+            res.status(400).send({ "err": "Somthing went wrong" })
+        } 
+    }
+}
+
+
 exports.browse_classifieds = async (req, res) => {
     
     try {
